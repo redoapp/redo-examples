@@ -1,0 +1,11 @@
+# Build
+build -k
+
+# Cache
+build --disk_cache ~/.cache/bazel-disk
+
+# Files
+import %workspace%/tools/bazel/deleted.bazelrc
+
+# User settings
+try-import %workspace%/user.bazelrc

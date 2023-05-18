@@ -1,0 +1,133 @@
+workspace(name = "redo_app")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# Skylib
+
+SKYLIB_VERSION = "d54e8a70ce90a24b921381cbe84fa0b88b22dc46"
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "7345a2c1b005aeead6dd402345a665cc514ae229100ff1e5e40f9939efd6856b",
+    strip_prefix = "bazel-skylib-%s" % SKYLIB_VERSION,
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/%s.tar.gz" % SKYLIB_VERSION],
+)
+
+# Rules Python
+
+PYTHON_VERSION = "0efcd94d0ee6e1e56b27d25469c28502282fab5b"
+
+http_archive(
+    name = "rules_python",
+    sha256 = "e611111d092e54f04e0818d1bc89aad6a841c6f50cbe96e8ec13a6eddcfbf354",
+    strip_prefix = "rules_python-%s" % PYTHON_VERSION,
+    url = "https://github.com/bazelbuild/rules_python/archive/%s.zip" % PYTHON_VERSION,
+)
+
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+
+python_register_toolchains(
+    name = "python3_11",
+    python_version = "3.11",
+)
+
+# Rules Go
+
+GO_VERSION = "v0.38.1"
+
+http_archive(
+    name = "io_bazel_rules_go",
+    sha256 = "dd926a88a564a9246713a9c00b35315f54cbd46b31a26d5d8fb264c07045f05d",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/%s/rules_go-%s.zip" % (GO_VERSION, GO_VERSION),
+)
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.19.3")
+
+# Gazelle
+
+GAZELLE_VERSION = "v0.29.0"
+
+http_archive(
+    name = "bazel_gazelle",
+    sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
+    url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/%s/bazel-gazelle-%s.tar.gz" % (GAZELLE_VERSION, GAZELLE_VERSION),
+)
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+
+gazelle_dependencies()
+
+# Protobuf
+
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "9b4ee22c250fe31b16f1a24d61467e40780a3fbb9b91c3b65be2a376ed913a1a",
+    strip_prefix = "protobuf-3.13.0",
+    url = "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.tar.gz",
+)
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+
+# Buildtools
+
+BUILDTOOLS_VERSION = "6.0.1"
+
+http_archive(
+    name = "com_github_bazelbuild_buildtools",
+    sha256 = "2abb7494488d7232acf43a13f6be886dff2c72c4b928a9861074089493015312",
+    strip_prefix = "buildtools-%s" % BUILDTOOLS_VERSION,
+    url = "https://github.com/bazelbuild/buildtools/archive/%s.zip" % BUILDTOOLS_VERSION,
+)
+
+load("@com_github_bazelbuild_buildtools//buildifier:deps.bzl", "buildifier_dependencies")
+
+buildifier_dependencies()
+
+# Rules File
+
+FILE_VERSION = "d613a640a9445547e4d99859dc3726514ee72e62"
+
+http_archive(
+    name = "rules_file",
+    sha256 = "f7fbb3aae4dc607af02424cc0205b3436012d7d2312222b0a8fed1c126e0b363",
+    strip_prefix = "rules_file-%s" % FILE_VERSION,
+    url = "https://github.com/hello-seer/rules_file/archive/%s.zip" % FILE_VERSION,
+)
+
+# Rules pkg
+
+RULES_PKG_VERSION = "e7a1ba187c96df78d83f1adb0eac1b7db24f96bc"
+
+http_archive(
+    name = "rules_pkg",
+    sha256 = "468b63f58ebee5287ce6ae0762e3b2893508924f5badb0f3ab73382ead6bdf94",
+    strip_prefix = "rules_pkg-%s" % RULES_PKG_VERSION,
+    url = "https://github.com/bazelbuild/rules_pkg/archive/%s.tar.gz" % RULES_PKG_VERSION,
+)
+
+# Rules Javascript
+
+RULES_JAVASCRIPT_VERSION = "5642459b09cbdbe5e29a2290664dde5996d56f98"
+
+http_archive(
+    name = "better_rules_javascript",
+    sha256 = "ad6051946f0508f41515bab5e9caa77467a836f78b269b6a520d1cb968b89ba7",
+    strip_prefix = "rules_javascript-%s" % RULES_JAVASCRIPT_VERSION,
+    url = "https://github.com/rivethealth/rules_javascript/archive/%s.tar.gz" % RULES_JAVASCRIPT_VERSION,
+)
+
+load("@better_rules_javascript//rules:workspace.bzl", javascript_repositories = "repositories")
+
+javascript_repositories()
+
+# Redo
+
+load("//tools/file:workspace.bzl", "file_repositories")
+
+file_repositories()

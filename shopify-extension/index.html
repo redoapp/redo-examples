@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Re:do Shopify Extension Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Roboto Condensed';
+      }
+    </style>
+  </head>
+  <body>
+    <dl>
+      <dt>Variant ID</dt>
+      <dd id="variant-id"></dd>
+      <dt>Checked</dt>
+      <dd id="checked"></dd>
+    </dl>
+    <redo-shopify-checkbox
+      id="redo-checkbox"
+      customer-id="123"
+    ></redo-shopify-checkbox>
+    <script>
+      const checkbox = document.getElementById("redo-checkbox");
+      checkbox.addEventListener("init", () => {
+        document.getElementById("variant-id").innerText = checkbox.variantId;
+        document.getElementById("checked").innerText = checkbox.value;
+      });
+      checkbox.addEventListener("change", () => {
+        document.getElementById("checked").innerText = checkbox.value;
+      });
+    </script>
+    <script
+      src="http://localhost:3003/web-components.js?widget_id=zyxkjhrgz5th5c4"
+      async
+    ></script>
+  </body>
+</html>

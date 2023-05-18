@@ -1,0 +1,29 @@
+load("@rules_file//file:rules.bzl", "bazelrc_deleted_packages")
+load("@rules_file//generate:rules.bzl", "generate")
+
+package(default_visibility = ["//visibility:public"])
+
+bazelrc_deleted_packages(
+    name = "bazelrc",
+    output = "deleted.bazelrc",
+    packages = ["@files//:packages"],
+)
+
+genrule(
+    name = "status_bzl",
+    outs = ["status-out.bzl"],
+    cmd = """
+        echo "STATUS = {" > "$@"
+        sed -e 's/ /": "/' -e 's/^/    "/' -e 's/$$/",/' bazel-out/stable-status.txt bazel-out/volatile-status.txt >> "$@"
+        echo "}" >> "$@"
+    """,
+    stamp = 1,
+)
+
+generate(
+    name = "status_gen",
+    srcs = ["status.bzl"],
+    data = ["status-out.bzl"],
+    data_prefix = "status.bzl",
+    data_strip_prefix = "status-out.bzl",
+)
